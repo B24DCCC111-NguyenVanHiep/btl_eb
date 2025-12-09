@@ -15,7 +15,7 @@ export const addProduct = async (req: Request, res: Response) => {
   try {
     const [result] = await pool.execute(
       'INSERT INTO products (code, name, price, stock, image_url) VALUES (?, ?, ?, ?, ?)',
-      [code, name, price, stock, image_url || null]
+      [code, name, price, stock || null]
     )
     res.json({ 
       id: (result as any).insertId, 
@@ -23,7 +23,6 @@ export const addProduct = async (req: Request, res: Response) => {
       name, 
       price, 
       stock, 
-      image_url: image_url || null 
     })
   } catch (err: any) {
     if (err.code === 'ER_DUP_ENTRY') {
@@ -37,19 +36,19 @@ export const addProduct = async (req: Request, res: Response) => {
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params
-  const { code, name, price, stock, image_url } = req.body
+  const { code, name, price, stock, } = req.body
   
   try {
     const [result] = await pool.execute(
       'UPDATE products SET code = ?, name = ?, price = ?, stock = ?, image_url = ? WHERE id = ?',
-      [code, name, price, stock, image_url || null, id]
+      [code, name, price, stock || null, id]
     )
 
     if ((result as any).affectedRows === 0) {
       return res.status(404).json({ message: 'Không tìm thấy sản phẩm để cập nhật' })
     }
 
-    res.json({ id: Number(id), code, name, price, stock, image_url })
+    res.json({ id: Number(id), code, name, price, stock})
   } catch (err: any) {
     if (err.code === 'ER_DUP_ENTRY') {
       res.status(400).json({ message: 'Mã sản phẩm mới bị trùng!' })
