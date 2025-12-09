@@ -4,14 +4,14 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { fetchProducts, addProduct, updateProduct, deleteProduct } from '../../redux/slices/productSlice'
 
 interface ProductForm {
-  id?: number, code: string, name: string, price: number, stock: number, image_url: string
+  id?: number, code: string, name: string, price: number, stock: number
 }
 
 const ProductManagement: React.FC = () => {
   const dispatch = useAppDispatch()
   const { products, loading } = useAppSelector(state => state.products)
   
-  const [formData, setFormData] = useState<ProductForm>({ id: undefined, code: '', name: '', price: 0, stock: 0, image_url: '' })
+  const [formData, setFormData] = useState<ProductForm>({ id: undefined, code: '', name: '', price: 0, stock: 0 })
   const [isEditing, setIsEditing] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -41,7 +41,7 @@ const ProductManagement: React.FC = () => {
       const { id, ...newProduct } = formData
       dispatch(addProduct({ ...newProduct, stock: 0 }))
     }
-    setFormData({ id: undefined, code: '', name: '', price: 0, stock: 0, image_url: '' })
+    setFormData({ id: undefined, code: '', name: '', price: 0, stock: 0 })
     setIsEditing(false)
   }
 
@@ -51,8 +51,7 @@ const ProductManagement: React.FC = () => {
       code: product.code, 
       name: product.name, 
       price: product.price, 
-      stock: product.stock, 
-      image_url: product.image_url || '' 
+      stock: product.stock
     })
     setIsEditing(true)
   }
@@ -94,16 +93,11 @@ const ProductManagement: React.FC = () => {
                 style={{width:'100%'}} 
               />
             </div>
-            
-            <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{fontWeight:'bold', display:'block', marginBottom:'5px'}}>Link ảnh</label>
-              <input name="image_url" placeholder="https://..." value={formData.image_url} onChange={handleChange} style={{width:'100%'}} />
-            </div>
           </div>
 
           <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
             <button type="submit" style={{ background: isEditing ? '#f39c12' : '#27ae60' }}>{isEditing ? 'LƯU' : 'THÊM'}</button>
-            {isEditing && <button type="button" onClick={() => { setIsEditing(false); setFormData({ id: undefined, code: '', name: '', price: 0, stock: 0, image_url: '' }) }} style={{ background: '#95a5a6' }}>HỦY</button>}
+            {isEditing && <button type="button" onClick={() => { setIsEditing(false); setFormData({ id: undefined, code: '', name: '', price: 0, stock: 0 }) }} style={{ background: '#95a5a6' }}>HỦY</button>}
           </div>
         </form>
       </div>
@@ -113,7 +107,7 @@ const ProductManagement: React.FC = () => {
       <table style={{ background: 'white' }}>
         <thead style={{ background: '#2c3e50', color: 'white' }}>
           <tr>
-            <th>Ảnh</th><th>Mã</th><th>Tên</th><th>Giá bán</th>
+            <th>Mã</th><th>Tên</th><th>Giá bán</th>
             <th>Tồn kho</th>
             <th>Hành động</th>
           </tr>
@@ -121,9 +115,6 @@ const ProductManagement: React.FC = () => {
         <tbody>
           {filteredProducts.map(p => (
             <tr key={p.id}>
-              <td style={{ textAlign: 'center' }}>
-                {p.image_url ? <img src={p.image_url} alt="" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} /> : <span style={{color: '#ccc'}}>No img</span>}
-              </td>
               <td><strong>{p.code}</strong></td>
               <td>{p.name}</td>
               <td style={{ color: '#e74c3c', fontWeight: 'bold' }}>
