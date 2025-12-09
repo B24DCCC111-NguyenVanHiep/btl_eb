@@ -297,7 +297,7 @@ const OrderManagement: React.FC = () => {
                   <td style={{ padding: 14, color: '#3498db', fontWeight: 'bold' }}>{o.order_code}</td>
                   <td style={{ padding: 14 }}>{cust?.full_name || 'Khách lẻ'}</td>
                   <td style={{ padding: 14 }}>{new Date(o.purchase_time).toLocaleString('vi-VN')}</td>
-                  <td style={{ padding: 14, color: '#e74c3c', fontWeight: 'bold' }}>{o.total_amount.toLocaleString()}₫</td>
+                  <td style={{ padding: 14, color: '#e74c3c', fontWeight: 'bold' }}>{new Intl.NumberFormat('vi-VN').format(o.total_amount)}₫</td>
                   <td style={{ padding: 14, textAlign: 'center' }}>
                     <select
                       value={o.status}
